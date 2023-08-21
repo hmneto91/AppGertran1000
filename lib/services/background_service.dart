@@ -10,6 +10,8 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../models/Login.dart';
+
 class BackGroound {
   static Future<bool> verificarLocalizacaoAparelho() async {
     LocationPermission permission = await Geolocator.checkPermission();
@@ -38,15 +40,21 @@ class BackGroound {
 
     final FlutterLocalNotificationsPlugin flutterLocalPlugin =
         FlutterLocalNotificationsPlugin();
+
     const AndroidNotificationChannel notificationChannel =
-        AndroidNotificationChannel("canal 1", "Lisboa Express",
-            description: "Aplicativo iniciado", importance: Importance.high);
+        AndroidNotificationChannel(
+      "canal 1",
+      "Gertran Monitoramento",
+      description: "Aplicativo iniciado",
+      importance: Importance.high,
+    );
     var service = FlutterBackgroundService();
 
     await flutterLocalPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(notificationChannel);
+
 
     //set for ios
     if (Platform.isIOS) {
@@ -91,7 +99,7 @@ class BackGroound {
       service.stopSelf();
     });
 
-    Timer.periodic(const Duration(minutes: 2), (timer) async {
+    Timer.periodic(const Duration(seconds: 15), (timer) async {
       LocationPermission permission = await Geolocator.checkPermission();
 
       if (permission == LocationPermission.denied) {
@@ -107,11 +115,15 @@ class BackGroound {
 
           DataKeeped dataKeeped = DataKeeped();
 
+          HttpReq httpReq = HttpReq();
+
+          String cpf = await dataKeeped.getToken('cpf');
+          String senha = await dataKeeped.getToken('senha');
+          Login l = await httpReq.fetchLogin(cpf , senha);
+
           String token = await dataKeeped.getToken("token");
 
           print(token);
-
-          HttpReq httpReq = HttpReq();
 
           httpReq.fetchPosicion(
               '${value.latitude}', '${value.longitude}', token);

@@ -8,7 +8,7 @@ class DataKeeped {
 
   Future<String> getToken(String chave) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token_global = prefs.getString('token') ?? "";
+    String token_global = prefs.getString(chave) ?? "";
     return token_global;
   }
 }

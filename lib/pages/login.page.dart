@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+import 'package:apptestewillians/services/http_req.dart';
+
 import '../models/Login.dart';
 import '../services/background_service.dart';
 import '../services/data_keeped.dart';
@@ -262,39 +264,11 @@ class LoginValidate extends StatelessWidget {
   late String token = "";
   Future<Login>? futureLogin;
 
-  DataKeeped dataKeeped = DataKeeped();
 
-  Future<Login> fetchLogin(final String cnpjcpf, final String senha) async {
-    String url = '';
-    if (motorista) {
-      url = 'https://api.gertran.zayit.com.br/v1/drivers/mobile/login/';
-    } else {
-      url = 'https://api.gertran.zayit.com.br/v1/drivers/mobile/login/';
-    }
-
-    Map<String, String> data = {'cpf': cnpjcpf, 'password': senha};
-
-    try {
-      http.Response response = await http.post(
-        Uri.parse(url),
-        body: data,
-      );
-
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        token = json.decode(response.body)["access_token"];
-        dataKeeped.saveToken('token', token);
-        dataKeeped.saveToken('cpf', cpfcnpj);
-      } else {
-        throw Exception('Failed to load Login');
-      }
-      return Login.fromJson(json.decode(response.body));
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
 
   void initState() {
-    futureLogin = fetchLogin(cpfcnpj, senha);
+    HttpReq httpReq = new HttpReq();
+    futureLogin = httpReq.fetchLogin(cpfcnpj, senha);
   }
 
   @override

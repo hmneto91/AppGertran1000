@@ -297,7 +297,7 @@ void Enviar() async {
       timeLimit: Duration(seconds: 10), // Adjust the time limit as needed
     );
 
-    String tokenValue = await dataKeeped.getToken('token');
+    // String tokenValue = await dataKeeped.getToken('token');
 
   } catch (e) {
     if (e is TimeoutException) {
