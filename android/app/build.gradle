@@ -12,9 +12,9 @@ if (flutterRoot == null) {
     //GradleException
 }
 
-def flutterVersionCode = '4'//localProperties.getProperty('flutter.versionCode')
+def flutterVersionCode = '5'//localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '4'
+    flutterVersionCode = '5'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
